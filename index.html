@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pomar dos Fofinhos • Em Breve!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --creme: #fff9ec;
+      --marrom-costura: #6b3e26;
+      --rosa-fofinho: #e93b6b;
+      --verde-folha: #4ea832;
+      --verde-escuro: #357a20;
+      --amarelo-sol: #ffcb2f;
+      --azul-ceu: #45a4d6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background-color: var(--azul-ceu);
+      color: var(--marrom-costura);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fundo da Lagoa */
+    .scenery-bg {
+      position: fixed;
+      inset: 0;
+      background: url('assets/fundo_lagoa.jpg') center bottom / cover no-repeat;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Botão de Som Flutuante */
+    .sound-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      background: var(--creme);
+      border: 3px dashed #e2b887;
+      box-shadow: 0 6px 0 #d4a373, 0 10px 20px rgba(0,0,0,0.18);
+      border-radius: 50px;
+      padding: 10px 18px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1rem;
+      color: var(--marrom-costura);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.15s ease;
+    }
+
+    .sound-btn:hover { transform: scale(1.06); }
+    .sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #d4a373; }
+
+    /* Elementos do Céu (Paralaxe) */
+    .sky-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .sun {
+      position: absolute;
+      top: 24px;
+      left: 6%;
+      width: clamp(95px, 13vw, 155px);
+      pointer-events: auto;
+      cursor: pointer;
+      animation: sunSpin 28s linear infinite, sunPulse 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.15));
+    }
+
+    .cloud {
+      position: absolute;
+      opacity: 0.96;
+      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.1));
+      pointer-events: auto;
+      cursor: pointer;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .cloud:hover { transform: scale(1.08); }
+
+    .cloud-1 {
+      top: 55px;
+      right: 10%;
+      width: clamp(110px, 15vw, 185px);
+      animation: floatCloud 7s ease-in-out infinite;
+    }
+
+    .cloud-2 {
+      top: 155px;
+      left: 22%;
+      width: clamp(90px, 12vw, 150px);
+      animation: floatCloud 9s ease-in-out infinite reverse;
+    }
+
+    /* Árvores nas Laterais */
+    .tree {
+      position: fixed;
+      bottom: 14%;
+      z-index: 2;
+      width: clamp(130px, 19vw, 250px);
+      transform-origin: bottom center;
+      cursor: pointer;
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.22));
+    }
+
+    .tree-left {
+      left: -25px;
+      animation: treeSway 4.8s ease-in-out infinite;
+    }
+
+    .tree-right {
+      right: -25px;
+      animation: treeSway 5.4s ease-in-out infinite reverse;
+    }
+
+    /* Container Principal */
+    .main-stage {
+      position: relative;
+      z-index: 10;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Logo Principal */
+    .logo-wrapper {
+      margin-top: 8px;
+      margin-bottom: 14px;
+      cursor: pointer;
+      animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 gentleRock 4.5s ease-in-out 1s infinite;
+    }
+
+    .logo-wrapper img {
+      width: clamp(210px, 30vw, 310px);
+      height: auto;
+      filter: drop-shadow(0 12px 22px rgba(0,0,0,0.25));
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .logo-wrapper:hover img { transform: scale(1.06) rotate(-2deg); }
+
+    /* Cartão de Feltro (Captura de E-mail) */
+    .felt-card {
+      position: relative;
+      background: var(--creme);
+      border-radius: 34px;
+      padding: 28px 30px 26px;
+      max-width: 540px;
+      width: 100%;
+      text-align: center;
+      box-shadow:
+        0 0 0 6px var(--creme),
+        0 0 0 9px #f29cb3,
+        0 18px 35px rgba(48, 28, 12, 0.28);
+      border: 3px dashed #d69f7e;
+      margin-bottom: 28px;
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+    }
+
+    .mailbox-deco {
+      position: absolute;
+      top: -46px;
+      right: -22px;
+      width: 105px;
+      cursor: pointer;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.22));
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .mailbox-deco:hover, .mailbox-wiggle {
+      animation: wiggle 0.6s ease-in-out;
+    }
+
+    .badge-soon {
+      display: inline-block;
+      background: var(--amarelo-sol);
+      color: var(--marrom-costura);
+      font-family: 'Fredoka', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      padding: 5px 16px;
+      border-radius: 99px;
+      border: 2px dashed #c98a12;
+      margin-bottom: 10px;
+      letter-spacing: 0.4px;
+    }
+
+    .felt-card h1 {
+      font-family: 'Fredoka', sans-serif;
+      font-size: clamp(1.55rem, 3.5vw, 2.05rem);
+      color: var(--rosa-fofinho);
+      line-height: 1.2;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 0 rgba(255,255,255,0.8);
+    }
+
+    .felt-card p {
+      font-size: 1.02rem;
+      line-height: 1.45;
+      color: #5c3a21;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .felt-input {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 20px;
+      border: 3px solid #e6ccb2;
+      background: #ffffff;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--marrom-costura);
+      outline: none;
+      transition: border-color 0.2s, transform 0.2s;
+      user-select: text;
+    }
+
+    .felt-input::placeholder { color: #b08968; font-weight: 600; }
+    .felt-input:focus {
+      border-color: var(--verde-folha);
+      transform: scale(1.015);
+    }
+
+    /* Campo invisível contra robôs */
+    .hp-field { display: none !important; }
+
+    .felt-submit {
+      background: linear-gradient(180deg, #5ec43f 0%, var(--verde-folha) 100%);
+      color: #fff;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      padding: 15px 24px;
+      border-radius: 22px;
+      border: 2px dashed #b9f5a6;
+      box-shadow: 0 6px 0 var(--verde-escuro), 0 12px 20px rgba(53, 122, 32, 0.35);
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .felt-submit:hover { transform: translateY(-2px) scale(1.02); }
+    .felt-submit:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 var(--verde-escuro);
+    }
+    .felt-submit:disabled { opacity: 0.7; cursor: wait; }
+
+    .privacy-note {
+      margin-top: 12px;
+      font-size: 0.82rem;
+      color: #8c6244;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .success-box {
+      display: none;
+      background: #eefbe8;
+      border: 3px dashed var(--verde-folha);
+      border-radius: 22px;
+      padding: 20px;
+      animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .success-box h2 {
+      font-family: 'Fredoka', sans-serif;
+      color: var(--verde-escuro);
+      font-size: 1.45rem;
+      margin-bottom: 6px;
+    }
+
+    /* Palco Interativo dos Personagens */
+    .cast-hint {
+      background: rgba(255, 249, 236, 0.9);
+      padding: 6px 16px;
+      border-radius: 99px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.92rem;
+      color: var(--marrom-costura);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      margin-bottom: 14px;
+    }
+
+    .characters-stage {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: flex-end;
+      gap: clamp(8px, 2vw, 22px);
+      width: 100%;
+      margin-top: 6px;
+    }
+
+    .char-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .char-card img {
+      width: clamp(88px, 11.5vw, 132px);
+      height: auto;
+      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.28));
+      transform-origin: bottom center;
+      animation: charIdle 3.2s ease-in-out infinite;
+    }
+
+    .char-card:nth-child(even) img { animation-delay: 0.8s; }
+    .char-card:nth-child(3n) img { animation-delay: 1.5s; }
+
+    .char-tag {
+      margin-top: 4px;
+      background: var(--creme);
+      border: 2px dashed #d4a373;
+      border-radius: 99px;
+      padding: 3px 12px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      color: var(--marrom-costura);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .char-card:hover .char-tag {
+      background: var(--amarelo-sol);
+      transform: scale(1.08);
+    }
+
+    /* Animação de Pulo ao Clicar no Personagem */
+    .char-jump img {
+      animation: superBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    }
+
+    /* Balão de Fala Rápido */
+    .speech-bubble {
+      position: absolute;
+      top: -34px;
+      background: #fff;
+      border: 2px solid var(--rosa-fofinho);
+      color: var(--marrom-costura);
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.82rem;
+      padding: 4px 10px;
+      border-radius: 14px;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(8px) scale(0.8);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 20;
+    }
+
+    .char-card.talking .speech-bubble {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Confetes de Frutas e Flores */
+    .confetti-piece {
+      position: fixed;
+      top: -80px;
+      z-index: 999;
+      pointer-events: none;
+      animation: confettiFall linear forwards;
+    }
+
+    /* Keyframes */
+    @keyframes sunSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes sunPulse { 0%, 100% { filter: drop-shadow(0 0 12px rgba(255,203,47,0.6)); } 50% { filter: drop-shadow(0 0 24px rgba(255,203,47,0.95)); } }
+    @keyframes floatCloud { 0%, 100% { transform: translateX(0px); } 50% { transform: translateX(22px); } }
+    @keyframes treeSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
+    @keyframes logoEntrance { 0% { opacity: 0; transform: scale(0.4) translateY(-40px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes gentleRock { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes charIdle { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-6px) scaleY(1.03); } }
+    @keyframes superBounce {
+      0% { transform: scale(1, 1) translateY(0); }
+      25% { transform: scale(1.15, 0.85) translateY(4px); }
+      55% { transform: scale(0.92, 1.12) translateY(-34px) rotate(-6deg); }
+      80% { transform: scale(1.05, 0.95) translateY(0) rotate(4deg); }
+      100% { transform: scale(1, 1) translateY(0) rotate(0); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-12deg) scale(1.08); }
+      50% { transform: rotate(10deg) scale(1.08); }
+      75% { transform: rotate(-6deg); }
+    }
+    @keyframes confettiFall {
+      to { transform: translateY(115vh) rotate(540deg); }
+    }
+
+    @media (max-width: 680px) {
+      .tree { width: 115px; bottom: 26%; opacity: 0.9; }
+      .mailbox-deco { width: 82px; top: -38px; right: -8px; }
+      .felt-card { padding: 24px 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fundo da Lagoa -->
+  <div class="scenery-bg"></div>
+
+  <!-- Botão de Controle de Áudio -->
+  <button id="soundToggle" class="sound-btn" aria-label="Ativar ou desativar sons">
+    <span id="soundIcon">🔊</span>
+    <span id="soundLabel">Sons Ativos</span>
+  </button>
+
+  <!-- Camada do Céu com Paralaxe -->
+  <div class="sky-layer" id="skyLayer">
+    <img src="assets/sol.png" alt="Sol sorridente" class="sun" data-sound="sparkle" />
+    <img src="assets/nuvem1.png" alt="Nuvem fofinha" class="cloud cloud-1" data-sound="pop" />
+    <img src="assets/nuvem2.png" alt="Nuvem fofinha" class="cloud cloud-2" data-sound="pop" />
+  </div>
+
+  <!-- Árvores Laterais -->
+  <img src="assets/arvore.png" alt="Árvore do pomar" class="tree tree-left" data-sound="rustle" />
+  <img src="assets/arvore.png" alt="Árvore do pomar" class="tree tree-right" data-sound="rustle" />
+
+  <!-- Palco Principal -->
+  <main class="main-stage">
+    <!-- Logotipo -->
+    <div class="logo-wrapper" data-sound="fanfare">
+      <img src="assets/logo.png" alt="Pomar dos Fofinhos" />
+    </div>
+
+    <!-- Cartão de Captura de E-mail -->
+    <section class="felt-card">
+      <img src="assets/caixa_correio.png" alt="Caixa de correio" class="mailbox-deco" id="mailboxImg" data-sound="pop" />
+
+      <div id="formContainer">
+        <span class="badge-soon">✨ EM BREVE NOVIDADES ✨</span>
+        <h1>Vem brincar no Pomar!</h1>
+        <p>Estamos costurando histórias, músicas e aventuras encantadoras. Deixe seu e-mail para receber o convite de inauguração em primeira mão!</p>
+
+        <form id="leadForm" class="form-group">
+          <input type="text" id="nomeInput" class="felt-input" placeholder="Seu nome (ou do pequeno fofinho)" autocomplete="name" />
+          <input type="email" id="emailInput" class="felt-input" placeholder="Seu melhor e-mail *" required autocomplete="email" />
+          <!-- Campo anti-spam oculto -->
+          <input type="text" id="websiteInput" class="hp-field" tabindex="-1" autocomplete="off" />
+
+          <button type="submit" id="submitBtn" class="felt-submit">
+            💌 Quero receber novidades!
+          </button>
+        </form>
+
+        <div class="privacy-note">
+          🔒 Ambiente seguro e livre de spam. Seus dados ficam protegidos com a gente.
+        </div>
+      </div>
+
+      <!-- Mensagem Pós-Envio -->
+      <div id="successBox" class="success-box">
+        <h2>🎉 Cartinha recebida com sucesso!</h2>
+        <p>A bandeirinha da nossa caixa de correio já subiu! Avisaremos você assim que as porteiras do <strong>Pomar dos Fofinhos</strong> se abrirem.</p>
+      </div>
+    </section>
+
+    <!-- Dica de Interatividade -->
+    <div class="cast-hint">👆 Toque nos personagens para ouvir e brincar!</div>
+
+    <!-- Elenco de Personagens -->
+    <section class="characters-stage" id="castStage">
+      <div class="char-card" data-sound="whistle" data-line="Fiu-fiu! Tudo em ordem!">
+        <span class="speech-bubble"></span>
+        <img src="assets/banha.png" alt="Banha" />
+        <span class="char-tag">Banha</span>
+      </div>
+
+      <div class="char-card" data-sound="marimba" data-line="Oi! Vamos explorar?">
+        <span class="speech-bubble"></span>
+        <img src="assets/bento.png" alt="Bento" />
+        <span class="char-tag">Bento</span>
+      </div>
+
+      <div class="char-card" data-sound="marimbaHigh" data-line="Que alegria te ver!">
+        <span class="speech-bubble"></span>
+        <img src="assets/duda.png" alt="Duda" />
+        <span class="char-tag">Duda</span>
+      </div>
+
+      <div class="char-card" data-sound="pop" data-line="Boing! Que legal!">
+        <span class="speech-bubble"></span>
+        <img src="assets/melequinha_claro.png" alt="Melequinha" />
+        <span class="char-tag">Melequinha</span>
+      </div>
+
+      <div class="char-card" data-sound="grumpy" data-line="Hmpf! Eu também gosto!">
+        <span class="speech-bubble"></span>
+        <img src="assets/melequinha_escuro.png" alt="Melequinha Bravo" />
+        <span class="char-tag">Zangadinho</span>
+      </div>
+
+      <div class="char-card" data-sound="chirp" data-line="Piu-piu! Lá do alto!">
+        <span class="speech-bubble"></span>
+        <img src="assets/tuco.png" alt="Tuco" />
+        <span class="char-tag">Tuco</span>
+      </div>
+
+      <div class="char-card" data-sound="harp" data-line="Tem bolo quentinho!">
+        <span class="speech-bubble"></span>
+        <img src="assets/vovo_jaca.png" alt="Vovó Jaca" />
+        <span class="char-tag">Vovó Jaca</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // =========================================================
+    // 1. COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
+    // =========================================================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJZic63zz14mQlhPHf6Ppu3Cc1WVf6px8hUZNdeZtSVM6yL9lvbSErQQhZFE3gf2nzVA/exec';
+
+    // =========================================================
+    // 2. MOTOR DE EFEITOS SONOROS (WEB AUDIO API - ZERO MP3)
+    // =========================================================
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+    }
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      initAudio();
+      const now = audioCtx.currentTime;
+
+      const makeOsc = (wave, freqStart, freqEnd, duration, gainVal = 0.18, delay = 0) => {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = wave;
+        osc.frequency.setValueAtTime(freqStart, now + delay);
+        if (freqEnd) {
+          osc.frequency.exponentialRampToValueAtTime(freqEnd, now + delay + duration);
+        }
+        gain.gain.setValueAtTime(0.001, now + delay);
+        gain.gain.linearRampToValueAtTime(gainVal, now + delay + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + delay + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now + delay);
+        osc.stop(now + delay + duration + 0.02);
+      };
+
+      switch (type) {
+        case 'whistle': // Apito da Banha
+          makeOsc('sine', 1350, 1750, 0.14, 0.14, 0);
+          makeOsc('sine', 1500, 2100, 0.22, 0.14, 0.16);
+          break;
+        case 'pop': // Bolha fofa
+          makeOsc('sine', 320, 780, 0.16, 0.2, 0);
+          break;
+        case 'grumpy': // Resmungo fofo
+          makeOsc('triangle', 190, 110, 0.28, 0.22, 0);
+          break;
+        case 'chirp': // Tucano Tuco
+          makeOsc('sine', 950, 1450, 0.11, 0.15, 0);
+          makeOsc('sine', 1200, 1680, 0.13, 0.15, 0.13);
+          break;
+        case 'marimba': // Bento
+          makeOsc('triangle', 440, 445, 0.22, 0.2, 0);
+          makeOsc('triangle', 554, 560, 0.25, 0.2, 0.1);
+          break;
+        case 'marimbaHigh': // Duda
+          makeOsc('triangle', 587, 592, 0.2, 0.2, 0);
+          makeOsc('triangle', 784, 790, 0.25, 0.2, 0.1);
+          break;
+        case 'harp': // Vovó Jaca
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+            makeOsc('sine', f, f, 0.45, 0.12, i * 0.07);
+          });
+          break;
+        case 'sparkle': // Sol
+          [880, 1174, 1318, 1760].forEach((f, i) => {
+            makeOsc('sine', f, f * 1.05, 0.3, 0.1, i * 0.06);
+          });
+          break;
+        case 'rustle': // Folhas da árvore
+          makeOsc('triangle', 260, 420, 0.18, 0.12, 0);
+          break;
+        case 'fanfare': // Sucesso / Logo
+          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
+            makeOsc('triangle', f, f, 0.35, 0.18, i * 0.11);
+          });
+          break;
+      }
+    }
+
+    // Toggle de Som
+    const soundToggle = document.getElementById('soundToggle');
+    soundToggle.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
+      document.getElementById('soundLabel').textContent = soundEnabled ? 'Sons Ativos' : 'Sem Som';
+      if (soundEnabled) playSound('pop');
+    });
+
+    // =========================================================
+    // 3. INTERATIVIDADE DOS PERSONAGENS E ELEMENTOS DO CENÁRIO
+    // =========================================================
+    document.querySelectorAll('.char-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const sound = card.dataset.sound;
+        const line = card.dataset.line;
+        const bubble = card.querySelector('.speech-bubble');
+
+        playSound(sound);
+
+        // Reinicia animação de pulo
+        card.classList.remove('char-jump');
+        void card.offsetWidth;
+        card.classList.add('char-jump');
+
+        // Mostra balão de fala
+        bubble.textContent = line;
+        card.classList.add('talking');
+        clearTimeout(card._talkTimer);
+        card._talkTimer = setTimeout(() => card.classList.remove('talking'), 2000);
+      });
+    });
+
+    document.querySelectorAll('[data-sound]').forEach(el => {
+      if (!el.classList.contains('char-card')) {
+        el.addEventListener('click', () => playSound(el.dataset.sound));
+      }
+    });
+
+    // Balança a caixa de correio enquanto o usuário digita
+    const mailboxImg = document.getElementById('mailboxImg');
+    ['nomeInput', 'emailInput'].forEach(id => {
+      document.getElementById(id).addEventListener('input', () => {
+        mailboxImg.classList.remove('mailbox-wiggle');
+        void mailboxImg.offsetWidth;
+        mailboxImg.classList.add('mailbox-wiggle');
+      });
+    });
+
+    // =========================================================
+    // 4. PARALAXE SUAVE NO CÉU (MOUSE E CELULAR)
+    // =========================================================
+    const skyLayer = document.getElementById('skyLayer');
+    window.addEventListener('mousemove', (e) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 24;
+      const y = (e.clientY / window.innerHeight - 0.5) * 16;
+      skyLayer.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // =========================================================
+    // 5. CHUVA DE FRUTAS E FLORES DE FELTRO
+    // =========================================================
+    function launchFeltConfetti() {
+      const items = [
+        'assets/maca.png',
+        'assets/pera.png',
+        'assets/banana.png',
+        'assets/flor.png'
+      ];
+
+      for (let i = 0; i < 32; i++) {
+        const img = document.createElement('img');
+        img.src = items[i % items.length];
+        img.className = 'confetti-piece';
+        img.style.left = Math.random() * 96 + 'vw';
+        img.style.width = (34 + Math.random() * 26) + 'px';
+        img.style.animationDuration = (2.4 + Math.random() * 2.2) + 's';
+        img.style.animationDelay = (Math.random() * 0.8) + 's';
+        document.body.appendChild(img);
+        setTimeout(() => img.remove(), 5500);
+      }
+    }
+
+    // =========================================================
+    // 6. ENVIO DO FORMULÁRIO PARA A PLANILHA GOOGLE
+    // =========================================================
+    const leadForm = document.getElementById('leadForm');
+    const submitBtn = document.getElementById('submitBtn');
+
+    leadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      initAudio();
+
+      const payload = {
+        nome: document.getElementById('nomeInput').value,
+        email: document.getElementById('emailInput').value,
+        website: document.getElementById('websiteInput').value
+      };
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = '✉️ Enviando cartinha...';
+
+      try {
+        if (SCRIPT_URL !== 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI') {
+          await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+        }
+
+        playSound('fanfare');
+        launchFeltConfetti();
+        document.getElementById('formContainer').style.display = 'none';
+        document.getElementById('successBox').style.display = 'block';
+      } catch (err) {
+        alert('Ops! Não conseguimos enviar sua cartinha agora. Tente novamente em instantes.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = '💌 Quero receber novidades!';
+      }
+    });
+  </script>
+</body>
+</html>
