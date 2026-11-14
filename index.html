@@ -44,15 +44,15 @@
       pointer-events: none;
     }
 
-    /* Botão de Som Flutuante */
+    /* Botão de Mutar / Desmutar no Topo */
     .sound-btn {
       position: fixed;
-      top: 18px;
-      right: 18px;
+      top: 16px;
+      right: 16px;
       z-index: 100;
       background: var(--creme);
       border: 3px dashed #e2b887;
-      box-shadow: 0 6px 0 #d4a373, 0 10px 20px rgba(0,0,0,0.18);
+      box-shadow: 0 6px 0 #d4a373, 0 10px 20px rgba(0,0,0,0.22);
       border-radius: 50px;
       padding: 10px 18px;
       font-family: 'Fredoka', sans-serif;
@@ -62,11 +62,18 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, background-color 0.2s ease;
     }
 
     .sound-btn:hover { transform: scale(1.06); }
     .sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #d4a373; }
+
+    /* Pulso suave caso o navegador aguarde o 1º clique para liberar o som */
+    .sound-btn.waiting-audio {
+      background: var(--amarelo-sol);
+      border-color: #c98a12;
+      animation: btnPulse 1.6s ease-in-out infinite;
+    }
 
     /* Elementos do Céu (Paralaxe) */
     .sky-layer {
@@ -100,7 +107,7 @@
     .cloud:hover { transform: scale(1.08); }
 
     .cloud-1 {
-      top: 55px;
+      top: 68px;
       right: 10%;
       width: clamp(110px, 15vw, 185px);
       animation: floatCloud 7s ease-in-out infinite;
@@ -148,7 +155,7 @@
 
     /* Logo Principal */
     .logo-wrapper {
-      margin-top: 8px;
+      margin-top: 12px;
       margin-bottom: 14px;
       cursor: pointer;
       animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
@@ -253,7 +260,6 @@
       transform: scale(1.015);
     }
 
-    /* Campo invisível contra robôs */
     .hp-field { display: none !important; }
 
     .felt-submit {
@@ -363,12 +369,10 @@
       transform: scale(1.08);
     }
 
-    /* Animação de Pulo ao Clicar no Personagem */
     .char-jump img {
       animation: superBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     }
 
-    /* Balão de Fala Rápido */
     .speech-bubble {
       position: absolute;
       top: -34px;
@@ -393,7 +397,6 @@
       transform: translateY(0) scale(1);
     }
 
-    /* Confetes de Frutas e Flores */
     .confetti-piece {
       position: fixed;
       top: -80px;
@@ -403,6 +406,10 @@
     }
 
     /* Keyframes */
+    @keyframes btnPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
     @keyframes sunSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes sunPulse { 0%, 100% { filter: drop-shadow(0 0 12px rgba(255,203,47,0.6)); } 50% { filter: drop-shadow(0 0 24px rgba(255,203,47,0.95)); } }
     @keyframes floatCloud { 0%, 100% { transform: translateX(0px); } 50% { transform: translateX(22px); } }
@@ -432,18 +439,25 @@
       .tree { width: 115px; bottom: 26%; opacity: 0.9; }
       .mailbox-deco { width: 82px; top: -38px; right: -8px; }
       .felt-card { padding: 24px 18px 20px; }
+      .sound-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
 
+  <!-- Música Tema em Loop (Pasta assets) -->
+  <audio id="bgMusic" loop autoplay preload="auto">
+    <source src="assets/musica.mp3" type="audio/mpeg" />
+    <source src="assets/musica.mp4" type="audio/mp4" />
+  </audio>
+
   <!-- Fundo da Lagoa -->
   <div class="scenery-bg"></div>
 
-  <!-- Botão de Controle de Áudio -->
-  <button id="soundToggle" class="sound-btn" aria-label="Ativar ou desativar sons">
+  <!-- Botão de Mutar no Topo -->
+  <button id="soundToggle" class="sound-btn" aria-label="Mutar ou ativar música e sons">
     <span id="soundIcon">🔊</span>
-    <span id="soundLabel">Sons Ativos</span>
+    <span id="soundLabel">Som Ativo</span>
   </button>
 
   <!-- Camada do Céu com Paralaxe -->
@@ -476,7 +490,6 @@
         <form id="leadForm" class="form-group">
           <input type="text" id="nomeInput" class="felt-input" placeholder="Seu nome (ou do pequeno fofinho)" autocomplete="name" />
           <input type="email" id="emailInput" class="felt-input" placeholder="Seu melhor e-mail *" required autocomplete="email" />
-          <!-- Campo anti-spam oculto -->
           <input type="text" id="websiteInput" class="hp-field" tabindex="-1" autocomplete="off" />
 
           <button type="submit" id="submitBtn" class="felt-submit">
@@ -549,13 +562,83 @@
     // =========================================================
     // 1. COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
     // =========================================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJZic63zz14mQlhPHf6Ppu3Cc1WVf6px8hUZNdeZtSVM6yL9lvbSErQQhZFE3gf2nzVA/exec';
+    const SCRIPT_URL = 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI';
 
     // =========================================================
-    // 2. MOTOR DE EFEITOS SONOROS (WEB AUDIO API - ZERO MP3)
+    // 2. MÚSICA DE FUNDO + MOTOR DE EFEITOS SONOROS
     // =========================================================
-    let soundEnabled = true;
+    const bgMusic = document.getElementById('bgMusic');
+    const soundToggle = document.getElementById('soundToggle');
+    const soundIcon = document.getElementById('soundIcon');
+    const soundLabel = document.getElementById('soundLabel');
+
+    bgMusic.volume = 0.45; // Equilibra a música com os efeitos dos personagens
+    let isMuted = false;
+    let musicStarted = false;
     let audioCtx = null;
+
+    function updateSoundButtonUI() {
+      if (isMuted) {
+        soundIcon.textContent = '🔇';
+        soundLabel.textContent = 'Mutado';
+        soundToggle.classList.remove('waiting-audio');
+      } else if (!musicStarted) {
+        soundIcon.textContent = '🎵';
+        soundLabel.textContent = 'Tocar Música';
+        soundToggle.classList.add('waiting-audio');
+      } else {
+        soundIcon.textContent = '🔊';
+        soundLabel.textContent = 'Som Ativo';
+        soundToggle.classList.remove('waiting-audio');
+      }
+    }
+
+    function tryStartMusic() {
+      if (isMuted || musicStarted) return;
+      const playPromise = bgMusic.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            musicStarted = true;
+            updateSoundButtonUI();
+          })
+          .catch(() => {
+            // Navegador aguardando a primeira interação do visitante
+            updateSoundButtonUI();
+          });
+      }
+    }
+
+    // Tenta tocar imediatamente ao carregar
+    window.addEventListener('DOMContentLoaded', tryStartMusic);
+
+    // Garante que a música comece no primeiro toque/clique em qualquer lugar da página
+    ['pointerdown', 'keydown'].forEach(evt => {
+      document.addEventListener(evt, () => {
+        if (!isMuted && !musicStarted) {
+          tryStartMusic();
+        }
+      }, { once: true });
+    });
+
+    // Controle do botão de mutar no topo
+    soundToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (!musicStarted && !isMuted) {
+        tryStartMusic();
+        return;
+      }
+
+      isMuted = !isMuted;
+      bgMusic.muted = isMuted;
+
+      if (!isMuted && bgMusic.paused) {
+        bgMusic.play().then(() => { musicStarted = true; }).catch(() => {});
+      }
+
+      updateSoundButtonUI();
+      if (!isMuted) playSound('pop');
+    });
 
     function initAudio() {
       if (!audioCtx) {
@@ -567,11 +650,11 @@
     }
 
     function playSound(type) {
-      if (!soundEnabled) return;
+      if (isMuted) return;
       initAudio();
       const now = audioCtx.currentTime;
 
-      const makeOsc = (wave, freqStart, freqEnd, duration, gainVal = 0.18, delay = 0) => {
+      const makeOsc = (wave, freqStart, freqEnd, duration, gainVal = 0.22, delay = 0) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = wave;
@@ -589,57 +672,48 @@
       };
 
       switch (type) {
-        case 'whistle': // Apito da Banha
-          makeOsc('sine', 1350, 1750, 0.14, 0.14, 0);
-          makeOsc('sine', 1500, 2100, 0.22, 0.14, 0.16);
+        case 'whistle':
+          makeOsc('sine', 1350, 1750, 0.14, 0.18, 0);
+          makeOsc('sine', 1500, 2100, 0.22, 0.18, 0.16);
           break;
-        case 'pop': // Bolha fofa
-          makeOsc('sine', 320, 780, 0.16, 0.2, 0);
+        case 'pop':
+          makeOsc('sine', 320, 780, 0.16, 0.24, 0);
           break;
-        case 'grumpy': // Resmungo fofo
-          makeOsc('triangle', 190, 110, 0.28, 0.22, 0);
+        case 'grumpy':
+          makeOsc('triangle', 190, 110, 0.28, 0.26, 0);
           break;
-        case 'chirp': // Tucano Tuco
-          makeOsc('sine', 950, 1450, 0.11, 0.15, 0);
-          makeOsc('sine', 1200, 1680, 0.13, 0.15, 0.13);
+        case 'chirp':
+          makeOsc('sine', 950, 1450, 0.11, 0.18, 0);
+          makeOsc('sine', 1200, 1680, 0.13, 0.18, 0.13);
           break;
-        case 'marimba': // Bento
-          makeOsc('triangle', 440, 445, 0.22, 0.2, 0);
-          makeOsc('triangle', 554, 560, 0.25, 0.2, 0.1);
+        case 'marimba':
+          makeOsc('triangle', 440, 445, 0.22, 0.24, 0);
+          makeOsc('triangle', 554, 560, 0.25, 0.24, 0.1);
           break;
-        case 'marimbaHigh': // Duda
-          makeOsc('triangle', 587, 592, 0.2, 0.2, 0);
-          makeOsc('triangle', 784, 790, 0.25, 0.2, 0.1);
+        case 'marimbaHigh':
+          makeOsc('triangle', 587, 592, 0.2, 0.24, 0);
+          makeOsc('triangle', 784, 790, 0.25, 0.24, 0.1);
           break;
-        case 'harp': // Vovó Jaca
+        case 'harp':
           [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('sine', f, f, 0.45, 0.12, i * 0.07);
+            makeOsc('sine', f, f, 0.45, 0.15, i * 0.07);
           });
           break;
-        case 'sparkle': // Sol
+        case 'sparkle':
           [880, 1174, 1318, 1760].forEach((f, i) => {
-            makeOsc('sine', f, f * 1.05, 0.3, 0.1, i * 0.06);
+            makeOsc('sine', f, f * 1.05, 0.3, 0.14, i * 0.06);
           });
           break;
-        case 'rustle': // Folhas da árvore
-          makeOsc('triangle', 260, 420, 0.18, 0.12, 0);
+        case 'rustle':
+          makeOsc('triangle', 260, 420, 0.18, 0.16, 0);
           break;
-        case 'fanfare': // Sucesso / Logo
+        case 'fanfare':
           [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('triangle', f, f, 0.35, 0.18, i * 0.11);
+            makeOsc('triangle', f, f, 0.35, 0.22, i * 0.11);
           });
           break;
       }
     }
-
-    // Toggle de Som
-    const soundToggle = document.getElementById('soundToggle');
-    soundToggle.addEventListener('click', () => {
-      soundEnabled = !soundEnabled;
-      document.getElementById('soundIcon').textContent = soundEnabled ? '🔊' : '🔇';
-      document.getElementById('soundLabel').textContent = soundEnabled ? 'Sons Ativos' : 'Sem Som';
-      if (soundEnabled) playSound('pop');
-    });
 
     // =========================================================
     // 3. INTERATIVIDADE DOS PERSONAGENS E ELEMENTOS DO CENÁRIO
@@ -652,12 +726,10 @@
 
         playSound(sound);
 
-        // Reinicia animação de pulo
         card.classList.remove('char-jump');
         void card.offsetWidth;
         card.classList.add('char-jump');
 
-        // Mostra balão de fala
         bubble.textContent = line;
         card.classList.add('talking');
         clearTimeout(card._talkTimer);
@@ -671,7 +743,6 @@
       }
     });
 
-    // Balança a caixa de correio enquanto o usuário digita
     const mailboxImg = document.getElementById('mailboxImg');
     ['nomeInput', 'emailInput'].forEach(id => {
       document.getElementById(id).addEventListener('input', () => {
@@ -682,7 +753,7 @@
     });
 
     // =========================================================
-    // 4. PARALAXE SUAVE NO CÉU (MOUSE E CELULAR)
+    // 4. PARALAXE SUAVE NO CÉU
     // =========================================================
     const skyLayer = document.getElementById('skyLayer');
     window.addEventListener('mousemove', (e) => {
@@ -735,7 +806,7 @@
       submitBtn.textContent = '✉️ Enviando cartinha...';
 
       try {
-        if (SCRIPT_URL !== 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI') {
+        if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyJZic63zz14mQlhPHf6Ppu3Cc1WVf6px8hUZNdeZtSVM6yL9lvbSErQQhZFE3gf2nzVA/exec') {
           await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
