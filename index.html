@@ -624,18 +624,18 @@
         </div>
       </div>
 
-      <!-- Mensagem Pós-Envio + Funil Redes Sociais -->
+      <!-- Mensagem Pós-Envio + Funil Redes Sociais (Todos visíveis) -->
       <div id="successBox" class="success-box">
         <h2>🎉 Cartinha recebida com sucesso!</h2>
         <p>A bandeirinha da nossa caixa de correio já subiu! Enquanto abrimos as porteiras, acompanhe os bastidores do <strong>Pomar dos Fofinhos</strong>:</p>
         <div class="social-funnel" id="socialFunnel">
-          <a id="linkIg" class="social-pill ig" href="#" target="_blank" rel="noopener">
+          <a id="linkIg" class="social-pill ig" href="https://instagram.com/pomardosfofinhos" target="_blank" rel="noopener">
             <img src="assets/icon_instagram.png" alt="Instagram" /> Instagram
           </a>
-          <a id="linkYt" class="social-pill yt" href="#" target="_blank" rel="noopener">
+          <a id="linkYt" class="social-pill yt" href="https://youtube.com/@pomardosfofinhos" target="_blank" rel="noopener">
             <img src="assets/icon_youtube.png" alt="YouTube" /> YouTube
           </a>
-          <a id="linkTt" class="social-pill tt" href="#" target="_blank" rel="noopener">
+          <a id="linkTt" class="social-pill tt" href="https://tiktok.com/@pomardosfofinhos" target="_blank" rel="noopener">
             <img src="assets/icon_tiktok.png" alt="TikTok" /> TikTok
           </a>
         </div>
@@ -694,37 +694,29 @@
 
   <script>
     // =========================================================
-    // 1. CONFIGURAÇÕES DO PROJETO (COLE SEUS LINKS AQUI)
+    // 1. CONFIGURAÇÕES DO PROJETO (COLE SUA URL DO APPS SCRIPT)
     // =========================================================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGAmUDMd5M2qo2v1IefpOe9wzeDWZ8t5uBIJPOF4UYHxb18w5cBSZ-kcwieHvPxQqqzg/exec';
 
-    // Deixe '' (vazio) nas redes que ainda não tiver criado; o botão some automaticamente
+    // Se preencher aqui, sobrescreve os links das tags <a> acima; se deixar vazio, mantém os links do HTML
     const SOCIAL_LINKS = {
-      instagram: 'https://instagram.com/pomardosfofinhos',
+      instagram: '',
       youtube: '',
       tiktok: ''
     };
 
-    // Configura botões das redes na tela de sucesso
     (function setupSocialLinks() {
       const map = [
         { id: 'linkIg', url: SOCIAL_LINKS.instagram },
         { id: 'linkYt', url: SOCIAL_LINKS.youtube },
         { id: 'linkTt', url: SOCIAL_LINKS.tiktok }
       ];
-      let visibleCount = 0;
       map.forEach(item => {
         const el = document.getElementById(item.id);
-        if (item.url && item.url.trim() !== '') {
+        if (el && item.url && item.url.trim() !== '') {
           el.href = item.url.trim();
-          visibleCount++;
-        } else {
-          el.style.display = 'none';
         }
       });
-      if (visibleCount === 0) {
-        document.getElementById('socialFunnel').style.display = 'none';
-      }
     })();
 
     // =========================================================
