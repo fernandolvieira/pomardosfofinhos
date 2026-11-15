@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Pomar dos Fofinhos • Em Breve!</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <meta name="theme-color" content="#45a4d6" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -196,7 +199,7 @@
       transform: scale(1.07) rotate(-3deg);
     }
 
-    /* Caixa de Correio (+30%) no Canto Superior Direito do Cartão */
+    /* Caixa de Correio no Canto Superior Direito do Cartão */
     .mailbox-deco {
       position: absolute;
       top: clamp(-80px, -7.8vh, -60px);
@@ -823,6 +826,11 @@
       e.preventDefault();
       initAudio();
 
+      if (!SCRIPT_URL || SCRIPT_URL.includes('COLE_SUA_URL')) {
+        alert('Falta colar a URL do Google Apps Script na variável SCRIPT_URL do index.html!');
+        return;
+      }
+
       const payload = {
         nome: document.getElementById('nomeInput').value,
         email: document.getElementById('emailInput').value,
@@ -833,13 +841,12 @@
       submitBtn.textContent = '✉️ Enviando cartinha...';
 
       try {
-        if (SCRIPT_URL !== 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI') {
-          await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-          });
-        }
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
 
         playSound('fanfare');
         launchFeltConfetti();
