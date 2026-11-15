@@ -1,12 +1,41 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Pomar dos Fofinhos • Em Breve!</title>
+  <meta name="description" content="Estamos costurando histórias, músicas e aventuras encantadoras. Cadastre seu e-mail para receber o convite de inauguração do Pomar dos Fofinhos!" />
+
+  <!-- Ícone da Aba e Celular -->
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="apple-touch-icon" href="assets/logo.png" />
   <meta name="theme-color" content="#45a4d6" />
+
+  <!-- Pré-visualização Rica para WhatsApp, Instagram e Facebook (Open Graph) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Pomar dos Fofinhos" />
+  <meta property="og:title" content="Pomar dos Fofinhos • Vem brincar no Pomar!" />
+  <meta property="og:description" content="Histórias, músicas e aventuras encantadoras feitas com carinho. Deixe seu e-mail para receber o convite de inauguração!" />
+  <meta property="og:url" content="https://www.pomardosfofinhos.com.br/" />
+  <meta property="og:image" content="https://www.pomardosfofinhos.com.br/assets/capa.jpg" />
+  <meta property="og:image:width" content="1024" />
+  <meta property="og:image:height" content="1024" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- =========================================================
+       OPCIONAL: MÉTRICAS (MICROSOFT CLARITY / GOOGLE ANALYTICS)
+       Descomente o bloco abaixo e cole seu ID quando quiser medir cliques
+       ========================================================= -->
+  <!--
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "SEU_ID_DO_CLARITY_AQUI");
+  </script>
+  -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet" />
@@ -199,7 +228,7 @@
       transform: scale(1.07) rotate(-3deg);
     }
 
-    /* Caixa de Correio no Canto Superior Direito do Cartão */
+    /* Caixa de Correio (+30%) no Canto Superior Direito do Cartão */
     .mailbox-deco {
       position: absolute;
       top: clamp(-80px, -7.8vh, -60px);
@@ -302,21 +331,54 @@
       line-height: 1.2;
     }
 
+    /* Tela de Sucesso + Funil para Redes Sociais */
     .success-box {
       display: none;
       background: #eefbe8;
       border: 2.5px dashed var(--verde-folha);
       border-radius: 18px;
-      padding: clamp(12px, 2vh, 18px);
+      padding: clamp(14px, 2.2vh, 20px);
       animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .success-box h2 {
       font-family: 'Fredoka', sans-serif;
       color: var(--verde-escuro);
-      font-size: clamp(1.1rem, 2.2vh, 1.38rem);
-      margin-bottom: 4px;
+      font-size: clamp(1.12rem, 2.3vh, 1.42rem);
+      margin-bottom: 6px;
     }
+
+    .success-box p {
+      margin-bottom: 12px;
+    }
+
+    .social-funnel {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 14px;
+      border-radius: 99px;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 0.85rem;
+      color: #fff;
+      text-decoration: none;
+      border: 2px dashed rgba(255,255,255,0.75);
+      box-shadow: 0 3px 0 rgba(0,0,0,0.2);
+      transition: transform 0.15s ease;
+    }
+
+    .social-pill:hover { transform: translateY(-2px) scale(1.04); }
+    .social-pill.ig { background: #e1306c; }
+    .social-pill.yt { background: #e62117; }
+    .social-pill.tt { background: #252525; }
 
     /* Bloco Inferior: Dica + 7 Personagens em Linha Única */
     .bottom-cast {
@@ -325,6 +387,7 @@
       flex-direction: column;
       align-items: center;
       flex-shrink: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
 
     .cast-hint {
@@ -480,6 +543,23 @@
       .mailbox-deco { width: 107px; top: -49px; right: -14px; }
       .cloud-2 { display: none; }
     }
+
+    /* Proteção contra teclado virtual do celular espremer o cartão */
+    body.keyboard-open .bottom-cast,
+    body.keyboard-open .logo-corner,
+    body.keyboard-open .mailbox-deco {
+      display: none !important;
+    }
+
+    body.keyboard-open .main-stage {
+      justify-content: center;
+      padding-top: 12px;
+    }
+
+    @media (max-height: 520px) {
+      .bottom-cast, .logo-corner, .mailbox-deco { display: none !important; }
+      .main-stage { justify-content: center; }
+    }
   </style>
 </head>
 <body>
@@ -537,10 +617,15 @@
         </div>
       </div>
 
-      <!-- Mensagem Pós-Envio -->
+      <!-- Mensagem Pós-Envio + Funil Redes Sociais -->
       <div id="successBox" class="success-box">
         <h2>🎉 Cartinha recebida com sucesso!</h2>
-        <p>A bandeirinha da nossa caixa de correio já subiu! Avisaremos você assim que as porteiras do <strong>Pomar dos Fofinhos</strong> se abrirem.</p>
+        <p>A bandeirinha da nossa caixa de correio já subiu! Enquanto abrimos as porteiras, acompanhe os bastidores do <strong>Pomar dos Fofinhos</strong>:</p>
+        <div class="social-funnel" id="socialFunnel">
+          <a id="linkIg" class="social-pill ig" href="#" target="_blank" rel="noopener">📸 Instagram</a>
+          <a id="linkYt" class="social-pill yt" href="#" target="_blank" rel="noopener">▶️ YouTube</a>
+          <a id="linkTt" class="social-pill tt" href="#" target="_blank" rel="noopener">🎵 TikTok</a>
+        </div>
       </div>
     </section>
 
@@ -549,43 +634,43 @@
       <div class="cast-hint">👆 Toque nos personagens para ouvir e brincar!</div>
 
       <section class="characters-stage" id="castStage">
-        <div class="char-card" data-sound="whistle" data-line="Fiu-fiu! Tudo em ordem!">
+        <div class="char-card" data-name="Banha" data-sound="whistle" data-line="Fiu-fiu! Tudo em ordem!">
           <span class="speech-bubble"></span>
           <img src="assets/banha.png" alt="Banha" />
           <span class="char-tag">Banha</span>
         </div>
 
-        <div class="char-card" data-sound="marimba" data-line="Oi! Vamos explorar?">
+        <div class="char-card" data-name="Bento" data-sound="marimba" data-line="Oi! Vamos explorar?">
           <span class="speech-bubble"></span>
           <img src="assets/bento.png" alt="Bento" />
           <span class="char-tag">Bento</span>
         </div>
 
-        <div class="char-card" data-sound="marimbaHigh" data-line="Que alegria te ver!">
+        <div class="char-card" data-name="Duda" data-sound="marimbaHigh" data-line="Que alegria te ver!">
           <span class="speech-bubble"></span>
           <img src="assets/duda.png" alt="Duda" />
           <span class="char-tag">Duda</span>
         </div>
 
-        <div class="char-card" data-sound="pop" data-line="Boing! Que legal!">
+        <div class="char-card" data-name="Melequinha" data-sound="pop" data-line="Boing! Que legal!">
           <span class="speech-bubble"></span>
           <img src="assets/melequinha_claro.png" alt="Melequinha" />
           <span class="char-tag">Melequinha</span>
         </div>
 
-        <div class="char-card" data-sound="grumpy" data-line="Hmpf! Eu também gosto!">
+        <div class="char-card" data-name="Zangadinho" data-sound="grumpy" data-line="Hmpf! Eu também gosto!">
           <span class="speech-bubble"></span>
           <img src="assets/melequinha_escuro.png" alt="Melequinha Bravo" />
           <span class="char-tag">Zangadinho</span>
         </div>
 
-        <div class="char-card" data-sound="chirp" data-line="Piu-piu! Lá do alto!">
+        <div class="char-card" data-name="Tuco" data-sound="chirp" data-line="Piu-piu! Lá do alto!">
           <span class="speech-bubble"></span>
           <img src="assets/tuco.png" alt="Tuco" />
           <span class="char-tag">Tuco</span>
         </div>
 
-        <div class="char-card" data-sound="harp" data-line="Tem bolo quentinho!">
+        <div class="char-card" data-name="VovoJaca" data-sound="harp" data-line="Tem bolo quentinho!">
           <span class="speech-bubble"></span>
           <img src="assets/vovo_jaca.png" alt="Vovó Jaca" />
           <span class="char-tag">Vovó Jaca</span>
@@ -596,21 +681,66 @@
 
   <script>
     // =========================================================
-    // 1. COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
+    // 1. CONFIGURAÇÕES DO PROJETO (COLE SEUS LINKS AQUI)
     // =========================================================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxlmdbCoqB3na6uF9_zCA-a3dtWoITjEztd3nZ0p8aqs2sWRCNXcDSYHemvdyLwAOSK6g/exec';
 
+    // Deixe '' (vazio) nas redes que ainda não tiver criado; o botão some automaticamente
+    const SOCIAL_LINKS = {
+      instagram: 'https://instagram.com/pomardosfofinhos',
+      youtube: '',
+      tiktok: ''
+    };
+
+    // Configura botões das redes na tela de sucesso
+    (function setupSocialLinks() {
+      const map = [
+        { id: 'linkIg', url: SOCIAL_LINKS.instagram },
+        { id: 'linkYt', url: SOCIAL_LINKS.youtube },
+        { id: 'linkTt', url: SOCIAL_LINKS.tiktok }
+      ];
+      let visibleCount = 0;
+      map.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (item.url && item.url.trim() !== '') {
+          el.href = item.url.trim();
+          visibleCount++;
+        } else {
+          el.style.display = 'none';
+        }
+      });
+      if (visibleCount === 0) {
+        document.getElementById('socialFunnel').style.display = 'none';
+      }
+    })();
+
     // =========================================================
-    // 2. MÚSICA ATIVA POR PADRÃO + BOTÃO DE MUTAR
+    // 2. MÚSICA ATIVA POR PADRÃO + AUDIO DUCKING + BOTÃO MUTAR
     // =========================================================
     const bgMusic = document.getElementById('bgMusic');
     const soundToggle = document.getElementById('soundToggle');
     const soundIcon = document.getElementById('soundIcon');
     const soundLabel = document.getElementById('soundLabel');
 
-    bgMusic.volume = 0.45;
+    const BASE_MUSIC_VOLUME = 0.45;
+    const DUCK_MUSIC_VOLUME = 0.12;
+    bgMusic.volume = BASE_MUSIC_VOLUME;
+
     let isMuted = false;
     let audioCtx = null;
+    let duckTimer = null;
+
+    // Abaixa suavemente a música durante efeitos sonoros e restaura depois
+    function duckMusic(durationMs = 1400) {
+      if (isMuted || bgMusic.paused) return;
+      bgMusic.volume = DUCK_MUSIC_VOLUME;
+      clearTimeout(duckTimer);
+      duckTimer = setTimeout(() => {
+        if (!isMuted) {
+          bgMusic.volume = BASE_MUSIC_VOLUME;
+        }
+      }, durationMs);
+    }
 
     function ensureMusicPlaying() {
       if (isMuted) return;
@@ -658,6 +788,7 @@
         soundToggle.classList.add('is-muted');
       } else {
         bgMusic.muted = false;
+        bgMusic.volume = BASE_MUSIC_VOLUME;
         bgMusic.play().catch(() => {});
         soundIcon.textContent = '🔊';
         soundLabel.textContent = 'Som Ativo';
@@ -681,10 +812,11 @@
     function playSound(type) {
       if (isMuted) return;
       ensureMusicPlaying();
+      duckMusic(type === 'fanfare' ? 2000 : 1300);
       initAudio();
       const now = audioCtx.currentTime;
 
-      const makeOsc = (wave, freqStart, freqEnd, duration, gainVal = 0.22, delay = 0) => {
+      const makeOsc = (wave, freqStart, freqEnd, duration, gainVal = 0.24, delay = 0) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.type = wave;
@@ -703,50 +835,50 @@
 
       switch (type) {
         case 'whistle':
-          makeOsc('sine', 1350, 1750, 0.14, 0.18, 0);
-          makeOsc('sine', 1500, 2100, 0.22, 0.18, 0.16);
+          makeOsc('sine', 1350, 1750, 0.14, 0.2, 0);
+          makeOsc('sine', 1500, 2100, 0.22, 0.2, 0.16);
           break;
         case 'pop':
-          makeOsc('sine', 320, 780, 0.16, 0.24, 0);
+          makeOsc('sine', 320, 780, 0.16, 0.26, 0);
           break;
         case 'grumpy':
-          makeOsc('triangle', 190, 110, 0.28, 0.26, 0);
+          makeOsc('triangle', 190, 110, 0.28, 0.28, 0);
           break;
         case 'chirp':
-          makeOsc('sine', 950, 1450, 0.11, 0.18, 0);
-          makeOsc('sine', 1200, 1680, 0.13, 0.18, 0.13);
+          makeOsc('sine', 950, 1450, 0.11, 0.2, 0);
+          makeOsc('sine', 1200, 1680, 0.13, 0.2, 0.13);
           break;
         case 'marimba':
-          makeOsc('triangle', 440, 445, 0.22, 0.24, 0);
-          makeOsc('triangle', 554, 560, 0.25, 0.24, 0.1);
+          makeOsc('triangle', 440, 445, 0.22, 0.26, 0);
+          makeOsc('triangle', 554, 560, 0.25, 0.26, 0.1);
           break;
         case 'marimbaHigh':
-          makeOsc('triangle', 587, 592, 0.2, 0.24, 0);
-          makeOsc('triangle', 784, 790, 0.25, 0.24, 0.1);
+          makeOsc('triangle', 587, 592, 0.2, 0.26, 0);
+          makeOsc('triangle', 784, 790, 0.25, 0.26, 0.1);
           break;
         case 'harp':
           [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('sine', f, f, 0.45, 0.15, i * 0.07);
+            makeOsc('sine', f, f, 0.45, 0.17, i * 0.07);
           });
           break;
         case 'sparkle':
           [880, 1174, 1318, 1760].forEach((f, i) => {
-            makeOsc('sine', f, f * 1.05, 0.3, 0.14, i * 0.06);
+            makeOsc('sine', f, f * 1.05, 0.3, 0.16, i * 0.06);
           });
           break;
         case 'rustle':
-          makeOsc('triangle', 260, 420, 0.18, 0.16, 0);
+          makeOsc('triangle', 260, 420, 0.18, 0.18, 0);
           break;
         case 'fanfare':
           [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('triangle', f, f, 0.35, 0.22, i * 0.11);
+            makeOsc('triangle', f, f, 0.35, 0.24, i * 0.11);
           });
           break;
       }
     }
 
     // =========================================================
-    // 4. INTERATIVIDADE DOS PERSONAGENS E ELEMENTOS DO CENÁRIO
+    // 4. INTERATIVIDADE, TECLADO MOBILE E PARALAXE
     // =========================================================
     document.querySelectorAll('.char-card').forEach(card => {
       card.addEventListener('click', () => {
@@ -755,6 +887,10 @@
         const bubble = card.querySelector('.speech-bubble');
 
         playSound(sound);
+
+        if (window.clarity) {
+          window.clarity('set', 'personagem_clicado', card.dataset.name);
+        }
 
         card.classList.remove('char-jump');
         void card.offsetWidth;
@@ -773,18 +909,33 @@
       }
     });
 
+    // Ajuste inteligente para teclado virtual no celular
     const mailboxImg = document.getElementById('mailboxImg');
     ['nomeInput', 'emailInput'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => {
+      const inputEl = document.getElementById(id);
+
+      inputEl.addEventListener('input', () => {
         mailboxImg.classList.remove('mailbox-wiggle');
         void mailboxImg.offsetWidth;
         mailboxImg.classList.add('mailbox-wiggle');
       });
+
+      inputEl.addEventListener('focus', () => {
+        if (window.innerWidth <= 768) {
+          document.body.classList.add('keyboard-open');
+        }
+      });
+
+      inputEl.addEventListener('blur', () => {
+        setTimeout(() => {
+          if (document.activeElement.tagName !== 'INPUT') {
+            document.body.classList.remove('keyboard-open');
+          }
+        }, 120);
+      });
     });
 
-    // =========================================================
-    // 5. PARALAXE SUAVE NO CÉU
-    // =========================================================
+    // Paralaxe suave no céu
     const skyLayer = document.getElementById('skyLayer');
     window.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 24;
@@ -793,7 +944,7 @@
     });
 
     // =========================================================
-    // 6. CHUVA DE FRUTAS E FLORES DE FELTRO
+    // 5. CHUVA DE FRUTAS E FLORES DE FELTRO
     // =========================================================
     function launchFeltConfetti() {
       const items = [
@@ -817,7 +968,7 @@
     }
 
     // =========================================================
-    // 7. ENVIO DO FORMULÁRIO PARA A PLANILHA GOOGLE
+    // 6. ENVIO DO FORMULÁRIO PARA A PLANILHA GOOGLE
     // =========================================================
     const leadForm = document.getElementById('leadForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -848,6 +999,7 @@
           body: JSON.stringify(payload)
         });
 
+        document.body.classList.remove('keyboard-open');
         playSound('fanfare');
         launchFeltConfetti();
         document.getElementById('formContainer').style.display = 'none';
