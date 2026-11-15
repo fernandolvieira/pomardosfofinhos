@@ -111,9 +111,9 @@
     }
 
     .cloud-2 {
-      top: clamp(95px, 15vh, 145px);
-      left: 16%;
-      width: clamp(70px, 11vw, 140px);
+      top: clamp(64px, 9vh, 96px);
+      left: 14%;
+      width: clamp(66px, 10vw, 130px);
       animation: floatCloud 9s ease-in-out infinite reverse;
     }
 
@@ -146,30 +146,13 @@
       max-width: 1060px;
       height: 100dvh;
       margin: 0 auto;
-      padding: clamp(8px, 1.6vh, 18px) 12px clamp(8px, 1.6vh, 16px);
+      padding: clamp(16px, 3vh, 32px) 12px clamp(8px, 1.6vh, 16px);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: flex-end;
+      gap: clamp(16px, 3.2vh, 34px);
       align-items: center;
     }
-
-    /* Logo Principal */
-    .logo-wrapper {
-      flex-shrink: 0;
-      cursor: pointer;
-      animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
-                 gentleRock 4.5s ease-in-out 1s infinite;
-    }
-
-    .logo-wrapper img {
-      width: clamp(76px, 12.5vh, 145px);
-      height: auto;
-      display: block;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.25));
-      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    .logo-wrapper:hover img { transform: scale(1.08) rotate(-2deg); }
 
     /* Cartão de Feltro (Captura de E-mail) */
     .felt-card {
@@ -177,28 +160,52 @@
       flex-shrink: 1;
       background: var(--creme);
       border-radius: clamp(22px, 3vh, 32px);
-      padding: clamp(14px, 2.2vh, 24px) clamp(16px, 3vw, 28px);
-      max-width: 500px;
-      width: 92%;
+      padding: clamp(18px, 2.6vh, 28px) clamp(18px, 3vw, 32px);
+      max-width: 520px;
+      width: 90%;
       text-align: center;
       box-shadow:
         0 0 0 4px var(--creme),
         0 0 0 7px #f29cb3,
         0 14px 28px rgba(48, 28, 12, 0.28);
       border: 2.5px dashed #d69f7e;
-      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
+      animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s backwards;
     }
 
-    /* Caixa de Correio */
+    /* Logo Grande no Canto Superior Esquerdo do Cartão */
+    .logo-corner {
+      position: absolute;
+      top: clamp(-82px, -11vh, -108px);
+      left: clamp(-78px, -8.5vw, -112px);
+      width: clamp(150px, 21vw, 225px);
+      cursor: pointer;
+      z-index: 18;
+      filter: drop-shadow(0 12px 18px rgba(0,0,0,0.28));
+      animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+                 gentleRock 4.5s ease-in-out 1s infinite;
+    }
+
+    .logo-corner img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .logo-corner:hover img {
+      transform: scale(1.07) rotate(-3deg);
+    }
+
+    /* Caixa de Correio no Canto Superior Direito do Cartão */
     .mailbox-deco {
       position: absolute;
-      top: clamp(-42px, -5.5vh, -56px);
-      right: clamp(-14px, -2vw, -26px);
-      width: clamp(86px, 12vh, 132px);
+      top: clamp(-46px, -6vh, -62px);
+      right: clamp(-18px, -2.5vw, -30px);
+      width: clamp(92px, 13vh, 138px);
       cursor: pointer;
       filter: drop-shadow(0 8px 12px rgba(0,0,0,0.24));
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-      z-index: 15;
+      z-index: 16;
     }
 
     .mailbox-deco:hover, .mailbox-wiggle {
@@ -221,7 +228,7 @@
 
     .felt-card h1 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(1.22rem, 2.7vh, 1.85rem);
+      font-size: clamp(1.25rem, 2.8vh, 1.9rem);
       color: var(--rosa-fofinho);
       line-height: 1.15;
       margin-bottom: clamp(4px, 0.7vh, 8px);
@@ -229,8 +236,8 @@
     }
 
     .felt-card p {
-      font-size: clamp(0.8rem, 1.55vh, 0.96rem);
-      line-height: 1.32;
+      font-size: clamp(0.82rem, 1.6vh, 0.98rem);
+      line-height: 1.35;
       color: #5c3a21;
       margin-bottom: clamp(10px, 1.6vh, 16px);
     }
@@ -436,8 +443,8 @@
     @keyframes sunPulse { 0%, 100% { filter: drop-shadow(0 0 12px rgba(255,203,47,0.6)); } 50% { filter: drop-shadow(0 0 24px rgba(255,203,47,0.95)); } }
     @keyframes floatCloud { 0%, 100% { transform: translateX(0px); } 50% { transform: translateX(18px); } }
     @keyframes treeSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
-    @keyframes logoEntrance { 0% { opacity: 0; transform: scale(0.4) translateY(-30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes gentleRock { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
+    @keyframes logoEntrance { 0% { opacity: 0; transform: scale(0.4) translateY(-25px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes gentleRock { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
     @keyframes popIn { 0% { opacity: 0; transform: scale(0.85) translateY(16px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes charIdle { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-5px) scaleY(1.03); } }
     @keyframes superBounce {
@@ -457,12 +464,18 @@
       to { transform: translateY(115vh) rotate(540deg); }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 720px) {
       .tree { width: 78px; bottom: 18%; opacity: 0.85; }
       .tree-left { left: -26px; }
       .tree-right { right: -26px; }
-      .felt-card { width: 94%; }
-      .mailbox-deco { width: 84px; top: -38px; right: -10px; }
+      .felt-card { width: 92%; padding-top: clamp(24px, 3.6vh, 32px); }
+      .logo-corner {
+        width: clamp(104px, 27vw, 136px);
+        top: clamp(-56px, -7.5vh, -72px);
+        left: -12px;
+      }
+      .mailbox-deco { width: 82px; top: -38px; right: -10px; }
+      .cloud-2 { display: none; }
     }
   </style>
 </head>
@@ -493,13 +506,12 @@
 
   <!-- Palco Único Sem Rolagem -->
   <main class="main-stage">
-    <!-- Logotipo -->
-    <div class="logo-wrapper" data-sound="fanfare">
-      <img src="assets/logo.png" alt="Pomar dos Fofinhos" />
-    </div>
-
-    <!-- Cartão de Captura de E-mail -->
+    <!-- Cartão de Captura de E-mail com Logo no Canto Superior Esquerdo -->
     <section class="felt-card">
+      <div class="logo-corner" data-sound="fanfare">
+        <img src="assets/logo.png" alt="Pomar dos Fofinhos" />
+      </div>
+
       <img src="assets/caixa_correio.png" alt="Caixa de correio" class="mailbox-deco" id="mailboxImg" data-sound="pop" />
 
       <div id="formContainer">
@@ -583,7 +595,7 @@
     // =========================================================
     // 1. COLE AQUI A URL DO SEU GOOGLE APPS SCRIPT
     // =========================================================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyJZic63zz14mQlhPHf6Ppu3Cc1WVf6px8hUZNdeZtSVM6yL9lvbSErQQhZFE3gf2nzVA/exec';
+    const SCRIPT_URL = 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI';
 
     // =========================================================
     // 2. MÚSICA ATIVA POR PADRÃO + BOTÃO DE MUTAR
@@ -603,9 +615,7 @@
       if (bgMusic.paused) {
         bgMusic.play().then(() => {
           removeUnlockListeners();
-        }).catch(() => {
-          // Aguarda o primeiro gesto do usuário caso o navegador bloqueie autoplay
-        });
+        }).catch(() => {});
       } else {
         removeUnlockListeners();
       }
@@ -623,19 +633,16 @@
       window.removeEventListener('keydown', unlockHandler, true);
     }
 
-    // Dispara imediatamente e nos eventos de carregamento
     ensureMusicPlaying();
     bgMusic.addEventListener('canplay', ensureMusicPlaying, { once: true });
     window.addEventListener('DOMContentLoaded', ensureMusicPlaying);
     window.addEventListener('load', ensureMusicPlaying);
 
-    // Garante início imediato na primeira interação caso o autoplay seja bloqueado pelo navegador
     window.addEventListener('pointerdown', unlockHandler, true);
     window.addEventListener('touchstart', unlockHandler, true);
     window.addEventListener('click', unlockHandler, true);
     window.addEventListener('keydown', unlockHandler, true);
 
-    // Botão dedicado exclusivamente a mutar / desmutar
     soundToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       isMuted = !isMuted;
@@ -704,146 +711,3 @@
           break;
         case 'chirp':
           makeOsc('sine', 950, 1450, 0.11, 0.18, 0);
-          makeOsc('sine', 1200, 1680, 0.13, 0.18, 0.13);
-          break;
-        case 'marimba':
-          makeOsc('triangle', 440, 445, 0.22, 0.24, 0);
-          makeOsc('triangle', 554, 560, 0.25, 0.24, 0.1);
-          break;
-        case 'marimbaHigh':
-          makeOsc('triangle', 587, 592, 0.2, 0.24, 0);
-          makeOsc('triangle', 784, 790, 0.25, 0.24, 0.1);
-          break;
-        case 'harp':
-          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('sine', f, f, 0.45, 0.15, i * 0.07);
-          });
-          break;
-        case 'sparkle':
-          [880, 1174, 1318, 1760].forEach((f, i) => {
-            makeOsc('sine', f, f * 1.05, 0.3, 0.14, i * 0.06);
-          });
-          break;
-        case 'rustle':
-          makeOsc('triangle', 260, 420, 0.18, 0.16, 0);
-          break;
-        case 'fanfare':
-          [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
-            makeOsc('triangle', f, f, 0.35, 0.22, i * 0.11);
-          });
-          break;
-      }
-    }
-
-    // =========================================================
-    // 4. INTERATIVIDADE DOS PERSONAGENS E ELEMENTOS DO CENÁRIO
-    // =========================================================
-    document.querySelectorAll('.char-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const sound = card.dataset.sound;
-        const line = card.dataset.line;
-        const bubble = card.querySelector('.speech-bubble');
-
-        playSound(sound);
-
-        card.classList.remove('char-jump');
-        void card.offsetWidth;
-        card.classList.add('char-jump');
-
-        bubble.textContent = line;
-        card.classList.add('talking');
-        clearTimeout(card._talkTimer);
-        card._talkTimer = setTimeout(() => card.classList.remove('talking'), 2000);
-      });
-    });
-
-    document.querySelectorAll('[data-sound]').forEach(el => {
-      if (!el.classList.contains('char-card')) {
-        el.addEventListener('click', () => playSound(el.dataset.sound));
-      }
-    });
-
-    const mailboxImg = document.getElementById('mailboxImg');
-    ['nomeInput', 'emailInput'].forEach(id => {
-      document.getElementById(id).addEventListener('input', () => {
-        mailboxImg.classList.remove('mailbox-wiggle');
-        void mailboxImg.offsetWidth;
-        mailboxImg.classList.add('mailbox-wiggle');
-      });
-    });
-
-    // =========================================================
-    // 5. PARALAXE SUAVE NO CÉU
-    // =========================================================
-    const skyLayer = document.getElementById('skyLayer');
-    window.addEventListener('mousemove', (e) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 24;
-      const y = (e.clientY / window.innerHeight - 0.5) * 16;
-      skyLayer.style.transform = `translate(${x}px, ${y}px)`;
-    });
-
-    // =========================================================
-    // 6. CHUVA DE FRUTAS E FLORES DE FELTRO
-    // =========================================================
-    function launchFeltConfetti() {
-      const items = [
-        'assets/maca.png',
-        'assets/pera.png',
-        'assets/banana.png',
-        'assets/flor.png'
-      ];
-
-      for (let i = 0; i < 32; i++) {
-        const img = document.createElement('img');
-        img.src = items[i % items.length];
-        img.className = 'confetti-piece';
-        img.style.left = Math.random() * 96 + 'vw';
-        img.style.width = (30 + Math.random() * 22) + 'px';
-        img.style.animationDuration = (2.4 + Math.random() * 2.2) + 's';
-        img.style.animationDelay = (Math.random() * 0.8) + 's';
-        document.body.appendChild(img);
-        setTimeout(() => img.remove(), 5500);
-      }
-    }
-
-    // =========================================================
-    // 7. ENVIO DO FORMULÁRIO PARA A PLANILHA GOOGLE
-    // =========================================================
-    const leadForm = document.getElementById('leadForm');
-    const submitBtn = document.getElementById('submitBtn');
-
-    leadForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      initAudio();
-
-      const payload = {
-        nome: document.getElementById('nomeInput').value,
-        email: document.getElementById('emailInput').value,
-        website: document.getElementById('websiteInput').value
-      };
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = '✉️ Enviando cartinha...';
-
-      try {
-        if (SCRIPT_URL !== 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI') {
-          await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify(payload)
-          });
-        }
-
-        playSound('fanfare');
-        launchFeltConfetti();
-        document.getElementById('formContainer').style.display = 'none';
-        document.getElementById('successBox').style.display = 'block';
-      } catch (err) {
-        alert('Ops! Não conseguimos enviar sua cartinha agora. Tente novamente em instantes.');
-        submitBtn.disabled = false;
-        submitBtn.textContent = '💌 Quero receber novidades!';
-      }
-    });
-  </script>
-</body>
-</html>
