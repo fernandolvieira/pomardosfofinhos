@@ -68,7 +68,6 @@
     .sound-btn:hover { transform: scale(1.06); }
     .sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #d4a373; }
 
-    /* Pulso suave caso o navegador aguarde o 1º clique para liberar o som */
     .sound-btn.waiting-audio {
       background: var(--amarelo-sol);
       border-color: #c98a12;
@@ -147,29 +146,29 @@
       z-index: 10;
       max-width: 1120px;
       margin: 0 auto;
-      padding: 24px 16px 60px;
+      padding: 20px 16px 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    /* Logo Principal */
+    /* Logo Principal (-50%) */
     .logo-wrapper {
-      margin-top: 12px;
-      margin-bottom: 14px;
+      margin-top: 8px;
+      margin-bottom: 18px;
       cursor: pointer;
       animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
                  gentleRock 4.5s ease-in-out 1s infinite;
     }
 
     .logo-wrapper img {
-      width: clamp(210px, 30vw, 310px);
+      width: clamp(105px, 15vw, 155px);
       height: auto;
-      filter: drop-shadow(0 12px 22px rgba(0,0,0,0.25));
+      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .logo-wrapper:hover img { transform: scale(1.06) rotate(-2deg); }
+    .logo-wrapper:hover img { transform: scale(1.08) rotate(-2deg); }
 
     /* Cartão de Feltro (Captura de E-mail) */
     .felt-card {
@@ -189,13 +188,14 @@
       animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
     }
 
+    /* Caixa de Correio (+30%) */
     .mailbox-deco {
       position: absolute;
-      top: -46px;
-      right: -22px;
-      width: 105px;
+      top: -60px;
+      right: -28px;
+      width: 137px;
       cursor: pointer;
-      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.22));
+      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.24));
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -405,7 +405,6 @@
       animation: confettiFall linear forwards;
     }
 
-    /* Keyframes */
     @keyframes btnPulse {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.07); }
@@ -437,7 +436,7 @@
 
     @media (max-width: 680px) {
       .tree { width: 115px; bottom: 26%; opacity: 0.9; }
-      .mailbox-deco { width: 82px; top: -38px; right: -8px; }
+      .mailbox-deco { width: 107px; top: -48px; right: -10px; }
       .felt-card { padding: 24px 18px 20px; }
       .sound-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.9rem; }
     }
@@ -445,11 +444,8 @@
 </head>
 <body>
 
-  <!-- Música Tema em Loop (Pasta assets) -->
-  <audio id="bgMusic" loop autoplay preload="auto">
-    <source src="assets/musica.mp3" type="audio/mpeg" />
-    <source src="assets/musica.mp4" type="audio/mp4" />
-  </audio>
+  <!-- Música Tema em Loop (assets/musica.mp3) -->
+  <audio id="bgMusic" src="assets/musica.mp3" loop preload="auto"></audio>
 
   <!-- Fundo da Lagoa -->
   <div class="scenery-bg"></div>
@@ -572,7 +568,7 @@
     const soundIcon = document.getElementById('soundIcon');
     const soundLabel = document.getElementById('soundLabel');
 
-    bgMusic.volume = 0.45; // Equilibra a música com os efeitos dos personagens
+    bgMusic.volume = 0.45;
     let isMuted = false;
     let musicStarted = false;
     let audioCtx = null;
@@ -595,33 +591,34 @@
 
     function tryStartMusic() {
       if (isMuted || musicStarted) return;
+      bgMusic.muted = false;
       const playPromise = bgMusic.play();
       if (playPromise !== undefined) {
         playPromise
           .then(() => {
             musicStarted = true;
             updateSoundButtonUI();
+            document.removeEventListener('click', unlockOnGesture);
+            document.removeEventListener('touchend', unlockOnGesture);
+            document.removeEventListener('keydown', unlockOnGesture);
           })
           .catch(() => {
-            // Navegador aguardando a primeira interação do visitante
             updateSoundButtonUI();
           });
       }
     }
 
-    // Tenta tocar imediatamente ao carregar
-    window.addEventListener('DOMContentLoaded', tryStartMusic);
+    function unlockOnGesture() {
+      if (!isMuted && !musicStarted) {
+        tryStartMusic();
+      }
+    }
 
-    // Garante que a música comece no primeiro toque/clique em qualquer lugar da página
-    ['pointerdown', 'keydown'].forEach(evt => {
-      document.addEventListener(evt, () => {
-        if (!isMuted && !musicStarted) {
-          tryStartMusic();
-        }
-      }, { once: true });
-    });
+    window.addEventListener('load', tryStartMusic);
+    document.addEventListener('click', unlockOnGesture);
+    document.addEventListener('touchend', unlockOnGesture);
+    document.addEventListener('keydown', unlockOnGesture);
 
-    // Controle do botão de mutar no topo
     soundToggle.addEventListener('click', (e) => {
       e.stopPropagation();
       if (!musicStarted && !isMuted) {
@@ -651,6 +648,7 @@
 
     function playSound(type) {
       if (isMuted) return;
+      tryStartMusic();
       initAudio();
       const now = audioCtx.currentTime;
 
