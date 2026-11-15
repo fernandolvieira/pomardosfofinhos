@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Pomar dos Fofinhos • Em Breve!</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -26,12 +26,15 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100dvh;
+      overflow: hidden;
       font-family: 'Nunito', sans-serif;
       background-color: var(--azul-ceu);
       color: var(--marrom-costura);
-      min-height: 100vh;
-      overflow-x: hidden;
       position: relative;
     }
 
@@ -47,26 +50,26 @@
     /* Botão de Mutar / Desmutar no Topo */
     .sound-btn {
       position: fixed;
-      top: 16px;
-      right: 16px;
+      top: clamp(10px, 1.8vh, 16px);
+      right: clamp(10px, 2vw, 18px);
       z-index: 100;
       background: var(--creme);
-      border: 3px dashed #e2b887;
-      box-shadow: 0 6px 0 #d4a373, 0 10px 20px rgba(0,0,0,0.22);
+      border: 2.5px dashed #e2b887;
+      box-shadow: 0 4px 0 #d4a373, 0 8px 16px rgba(0,0,0,0.2);
       border-radius: 50px;
-      padding: 10px 18px;
+      padding: clamp(6px, 1vh, 9px) clamp(12px, 2vw, 16px);
       font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
+      font-size: clamp(0.8rem, 1.6vh, 0.95rem);
       color: var(--marrom-costura);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: transform 0.15s ease, background-color 0.2s ease;
     }
 
     .sound-btn:hover { transform: scale(1.06); }
-    .sound-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #d4a373; }
+    .sound-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #d4a373; }
 
     .sound-btn.waiting-audio {
       background: var(--amarelo-sol);
@@ -85,19 +88,19 @@
 
     .sun {
       position: absolute;
-      top: 24px;
-      left: 6%;
-      width: clamp(95px, 13vw, 155px);
+      top: clamp(10px, 2vh, 22px);
+      left: clamp(3%, 5vw, 6%);
+      width: clamp(64px, 11vw, 145px);
       pointer-events: auto;
       cursor: pointer;
       animation: sunSpin 28s linear infinite, sunPulse 3.5s ease-in-out infinite;
-      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.15));
+      filter: drop-shadow(0 6px 12px rgba(0,0,0,0.15));
     }
 
     .cloud {
       position: absolute;
-      opacity: 0.96;
-      filter: drop-shadow(0 6px 10px rgba(0,0,0,0.1));
+      opacity: 0.95;
+      filter: drop-shadow(0 5px 8px rgba(0,0,0,0.1));
       pointer-events: auto;
       cursor: pointer;
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -106,65 +109,68 @@
     .cloud:hover { transform: scale(1.08); }
 
     .cloud-1 {
-      top: 68px;
-      right: 10%;
-      width: clamp(110px, 15vw, 185px);
+      top: clamp(46px, 7vh, 68px);
+      right: 6%;
+      width: clamp(82px, 13vw, 175px);
       animation: floatCloud 7s ease-in-out infinite;
     }
 
     .cloud-2 {
-      top: 155px;
-      left: 22%;
-      width: clamp(90px, 12vw, 150px);
+      top: clamp(95px, 15vh, 145px);
+      left: 16%;
+      width: clamp(70px, 11vw, 140px);
       animation: floatCloud 9s ease-in-out infinite reverse;
     }
 
     /* Árvores nas Laterais */
     .tree {
       position: fixed;
-      bottom: 14%;
+      bottom: 12%;
       z-index: 2;
-      width: clamp(130px, 19vw, 250px);
+      width: clamp(82px, 16vw, 230px);
       transform-origin: bottom center;
       cursor: pointer;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.22));
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.22));
     }
 
     .tree-left {
-      left: -25px;
+      left: -22px;
       animation: treeSway 4.8s ease-in-out infinite;
     }
 
     .tree-right {
-      right: -25px;
+      right: -22px;
       animation: treeSway 5.4s ease-in-out infinite reverse;
     }
 
-    /* Container Principal */
+    /* Container Principal em Tela Única (Sem Rolagem) */
     .main-stage {
       position: relative;
       z-index: 10;
-      max-width: 1120px;
+      width: 100%;
+      max-width: 1060px;
+      height: 100dvh;
       margin: 0 auto;
-      padding: 20px 16px 60px;
+      padding: clamp(8px, 1.6vh, 18px) 12px clamp(8px, 1.6vh, 16px);
       display: flex;
       flex-direction: column;
+      justify-content: space-between;
       align-items: center;
     }
 
     /* Logo Principal (-50%) */
     .logo-wrapper {
-      margin-top: 8px;
-      margin-bottom: 18px;
+      flex-shrink: 0;
       cursor: pointer;
       animation: logoEntrance 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
                  gentleRock 4.5s ease-in-out 1s infinite;
     }
 
     .logo-wrapper img {
-      width: clamp(105px, 15vw, 155px);
+      width: clamp(76px, 12.5vh, 145px);
       height: auto;
-      filter: drop-shadow(0 10px 18px rgba(0,0,0,0.25));
+      display: block;
+      filter: drop-shadow(0 8px 14px rgba(0,0,0,0.25));
       transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
@@ -173,30 +179,31 @@
     /* Cartão de Feltro (Captura de E-mail) */
     .felt-card {
       position: relative;
+      flex-shrink: 1;
       background: var(--creme);
-      border-radius: 34px;
-      padding: 28px 30px 26px;
-      max-width: 540px;
-      width: 100%;
+      border-radius: clamp(22px, 3vh, 32px);
+      padding: clamp(14px, 2.2vh, 24px) clamp(16px, 3vw, 28px);
+      max-width: 500px;
+      width: 92%;
       text-align: center;
       box-shadow:
-        0 0 0 6px var(--creme),
-        0 0 0 9px #f29cb3,
-        0 18px 35px rgba(48, 28, 12, 0.28);
-      border: 3px dashed #d69f7e;
-      margin-bottom: 28px;
+        0 0 0 4px var(--creme),
+        0 0 0 7px #f29cb3,
+        0 14px 28px rgba(48, 28, 12, 0.28);
+      border: 2.5px dashed #d69f7e;
       animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s backwards;
     }
 
-    /* Caixa de Correio (+30%) */
+    /* Caixa de Correio (+30% proporcional) */
     .mailbox-deco {
       position: absolute;
-      top: -60px;
-      right: -28px;
-      width: 137px;
+      top: clamp(-42px, -5.5vh, -56px);
+      right: clamp(-14px, -2vw, -26px);
+      width: clamp(86px, 12vh, 132px);
       cursor: pointer;
-      filter: drop-shadow(0 10px 14px rgba(0,0,0,0.24));
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.24));
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      z-index: 15;
     }
 
     .mailbox-deco:hover, .mailbox-wiggle {
@@ -209,44 +216,44 @@
       color: var(--marrom-costura);
       font-family: 'Fredoka', sans-serif;
       font-weight: 700;
-      font-size: 0.92rem;
-      padding: 5px 16px;
+      font-size: clamp(0.72rem, 1.4vh, 0.88rem);
+      padding: 3px 12px;
       border-radius: 99px;
       border: 2px dashed #c98a12;
-      margin-bottom: 10px;
+      margin-bottom: clamp(4px, 0.8vh, 8px);
       letter-spacing: 0.4px;
     }
 
     .felt-card h1 {
       font-family: 'Fredoka', sans-serif;
-      font-size: clamp(1.55rem, 3.5vw, 2.05rem);
+      font-size: clamp(1.22rem, 2.7vh, 1.85rem);
       color: var(--rosa-fofinho);
-      line-height: 1.2;
-      margin-bottom: 8px;
+      line-height: 1.15;
+      margin-bottom: clamp(4px, 0.7vh, 8px);
       text-shadow: 0 2px 0 rgba(255,255,255,0.8);
     }
 
     .felt-card p {
-      font-size: 1.02rem;
-      line-height: 1.45;
+      font-size: clamp(0.8rem, 1.55vh, 0.96rem);
+      line-height: 1.32;
       color: #5c3a21;
-      margin-bottom: 18px;
+      margin-bottom: clamp(10px, 1.6vh, 16px);
     }
 
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 11px;
+      gap: clamp(7px, 1.1vh, 10px);
     }
 
     .felt-input {
       width: 100%;
-      padding: 14px 18px;
-      border-radius: 20px;
-      border: 3px solid #e6ccb2;
+      padding: clamp(9px, 1.4vh, 13px) 14px;
+      border-radius: 16px;
+      border: 2.5px solid #e6ccb2;
       background: #ffffff;
       font-family: 'Nunito', sans-serif;
-      font-size: 1rem;
+      font-size: clamp(0.88rem, 1.6vh, 0.98rem);
       font-weight: 700;
       color: var(--marrom-costura);
       outline: none;
@@ -257,7 +264,7 @@
     .felt-input::placeholder { color: #b08968; font-weight: 600; }
     .felt-input:focus {
       border-color: var(--verde-folha);
-      transform: scale(1.015);
+      transform: scale(1.01);
     }
 
     .hp-field { display: none !important; }
@@ -266,69 +273,73 @@
       background: linear-gradient(180deg, #5ec43f 0%, var(--verde-folha) 100%);
       color: #fff;
       font-family: 'Fredoka', sans-serif;
-      font-size: 1.2rem;
+      font-size: clamp(0.98rem, 1.9vh, 1.15rem);
       font-weight: 600;
-      padding: 15px 24px;
-      border-radius: 22px;
+      padding: clamp(10px, 1.5vh, 14px) 18px;
+      border-radius: 18px;
       border: 2px dashed #b9f5a6;
-      box-shadow: 0 6px 0 var(--verde-escuro), 0 12px 20px rgba(53, 122, 32, 0.35);
+      box-shadow: 0 5px 0 var(--verde-escuro), 0 10px 16px rgba(53, 122, 32, 0.32);
       cursor: pointer;
       transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .felt-submit:hover { transform: translateY(-2px) scale(1.02); }
     .felt-submit:active {
-      transform: translateY(4px);
+      transform: translateY(3px);
       box-shadow: 0 2px 0 var(--verde-escuro);
     }
     .felt-submit:disabled { opacity: 0.7; cursor: wait; }
 
     .privacy-note {
-      margin-top: 12px;
-      font-size: 0.82rem;
+      margin-top: clamp(6px, 1vh, 10px);
+      font-size: clamp(0.7rem, 1.3vh, 0.8rem);
       color: #8c6244;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      line-height: 1.2;
     }
 
     .success-box {
       display: none;
       background: #eefbe8;
-      border: 3px dashed var(--verde-folha);
-      border-radius: 22px;
-      padding: 20px;
+      border: 2.5px dashed var(--verde-folha);
+      border-radius: 18px;
+      padding: clamp(12px, 2vh, 18px);
       animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     .success-box h2 {
       font-family: 'Fredoka', sans-serif;
       color: var(--verde-escuro);
-      font-size: 1.45rem;
-      margin-bottom: 6px;
+      font-size: clamp(1.1rem, 2.2vh, 1.38rem);
+      margin-bottom: 4px;
     }
 
-    /* Palco Interativo dos Personagens */
+    /* Bloco Inferior: Dica + 7 Personagens em Linha Única */
+    .bottom-cast {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
     .cast-hint {
-      background: rgba(255, 249, 236, 0.9);
-      padding: 6px 16px;
+      background: rgba(255, 249, 236, 0.92);
+      padding: 4px 14px;
       border-radius: 99px;
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.92rem;
+      font-size: clamp(0.75rem, 1.4vh, 0.88rem);
       color: var(--marrom-costura);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-      margin-bottom: 14px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+      margin-bottom: clamp(6px, 1.1vh, 12px);
     }
 
     .characters-stage {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: flex-end;
-      gap: clamp(8px, 2vw, 22px);
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      align-items: end;
+      gap: clamp(3px, 1.4vw, 18px);
       width: 100%;
-      margin-top: 6px;
+      max-width: 960px;
     }
 
     .char-card {
@@ -336,14 +347,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-width: 0;
       cursor: pointer;
-      transition: transform 0.2s;
     }
 
     .char-card img {
-      width: clamp(88px, 11.5vw, 132px);
-      height: auto;
-      filter: drop-shadow(0 10px 12px rgba(0,0,0,0.28));
+      width: 100%;
+      max-width: 118px;
+      max-height: clamp(58px, 14vh, 122px);
+      object-fit: contain;
+      filter: drop-shadow(0 6px 8px rgba(0,0,0,0.28));
       transform-origin: bottom center;
       animation: charIdle 3.2s ease-in-out infinite;
     }
@@ -352,21 +365,25 @@
     .char-card:nth-child(3n) img { animation-delay: 1.5s; }
 
     .char-tag {
-      margin-top: 4px;
+      margin-top: 3px;
       background: var(--creme);
-      border: 2px dashed #d4a373;
+      border: 1.5px dashed #d4a373;
       border-radius: 99px;
-      padding: 3px 12px;
+      padding: 2px clamp(4px, 0.9vw, 10px);
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.85rem;
+      font-size: clamp(0.55rem, 1.8vw, 0.82rem);
       color: var(--marrom-costura);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
       transition: transform 0.2s, background 0.2s;
     }
 
     .char-card:hover .char-tag {
       background: var(--amarelo-sol);
-      transform: scale(1.08);
+      transform: scale(1.06);
     }
 
     .char-jump img {
@@ -375,26 +392,42 @@
 
     .speech-bubble {
       position: absolute;
-      top: -34px;
+      top: -32px;
+      left: 50%;
       background: #fff;
       border: 2px solid var(--rosa-fofinho);
       color: var(--marrom-costura);
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.82rem;
-      padding: 4px 10px;
-      border-radius: 14px;
+      font-size: clamp(0.72rem, 1.4vh, 0.82rem);
+      padding: 3px 9px;
+      border-radius: 12px;
       white-space: nowrap;
       pointer-events: none;
       opacity: 0;
-      transform: translateY(8px) scale(0.8);
+      transform: translate(-50%, 8px) scale(0.8);
       transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
       box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      z-index: 20;
+      z-index: 30;
+    }
+
+    /* Evita corte do balão nas pontas da tela */
+    .char-card:first-child .speech-bubble {
+      left: 0;
+      transform: translate(0, 8px) scale(0.8);
+    }
+    .char-card:last-child .speech-bubble {
+      left: auto;
+      right: 0;
+      transform: translate(0, 8px) scale(0.8);
     }
 
     .char-card.talking .speech-bubble {
       opacity: 1;
-      transform: translateY(0) scale(1);
+      transform: translate(-50%, 0) scale(1);
+    }
+    .char-card:first-child.talking .speech-bubble,
+    .char-card:last-child.talking .speech-bubble {
+      transform: translate(0, 0) scale(1);
     }
 
     .confetti-piece {
@@ -411,16 +444,16 @@
     }
     @keyframes sunSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
     @keyframes sunPulse { 0%, 100% { filter: drop-shadow(0 0 12px rgba(255,203,47,0.6)); } 50% { filter: drop-shadow(0 0 24px rgba(255,203,47,0.95)); } }
-    @keyframes floatCloud { 0%, 100% { transform: translateX(0px); } 50% { transform: translateX(22px); } }
+    @keyframes floatCloud { 0%, 100% { transform: translateX(0px); } 50% { transform: translateX(18px); } }
     @keyframes treeSway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
-    @keyframes logoEntrance { 0% { opacity: 0; transform: scale(0.4) translateY(-40px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes logoEntrance { 0% { opacity: 0; transform: scale(0.4) translateY(-30px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
     @keyframes gentleRock { 0%, 100% { transform: rotate(-1.5deg); } 50% { transform: rotate(1.5deg); } }
-    @keyframes popIn { 0% { opacity: 0; transform: scale(0.85) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes charIdle { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-6px) scaleY(1.03); } }
+    @keyframes popIn { 0% { opacity: 0; transform: scale(0.85) translateY(16px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+    @keyframes charIdle { 0%, 100% { transform: translateY(0) scaleY(1); } 50% { transform: translateY(-5px) scaleY(1.03); } }
     @keyframes superBounce {
       0% { transform: scale(1, 1) translateY(0); }
-      25% { transform: scale(1.15, 0.85) translateY(4px); }
-      55% { transform: scale(0.92, 1.12) translateY(-34px) rotate(-6deg); }
+      25% { transform: scale(1.15, 0.85) translateY(3px); }
+      55% { transform: scale(0.92, 1.12) translateY(-24px) rotate(-6deg); }
       80% { transform: scale(1.05, 0.95) translateY(0) rotate(4deg); }
       100% { transform: scale(1, 1) translateY(0) rotate(0); }
     }
@@ -434,11 +467,12 @@
       to { transform: translateY(115vh) rotate(540deg); }
     }
 
-    @media (max-width: 680px) {
-      .tree { width: 115px; bottom: 26%; opacity: 0.9; }
-      .mailbox-deco { width: 107px; top: -48px; right: -10px; }
-      .felt-card { padding: 24px 18px 20px; }
-      .sound-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.9rem; }
+    @media (max-width: 600px) {
+      .tree { width: 78px; bottom: 18%; opacity: 0.85; }
+      .tree-left { left: -26px; }
+      .tree-right { right: -26px; }
+      .felt-card { width: 94%; }
+      .mailbox-deco { width: 84px; top: -38px; right: -10px; }
     }
   </style>
 </head>
@@ -467,7 +501,7 @@
   <img src="assets/arvore.png" alt="Árvore do pomar" class="tree tree-left" data-sound="rustle" />
   <img src="assets/arvore.png" alt="Árvore do pomar" class="tree tree-right" data-sound="rustle" />
 
-  <!-- Palco Principal -->
+  <!-- Palco Único Sem Rolagem -->
   <main class="main-stage">
     <!-- Logotipo -->
     <div class="logo-wrapper" data-sound="fanfare">
@@ -505,53 +539,54 @@
       </div>
     </section>
 
-    <!-- Dica de Interatividade -->
-    <div class="cast-hint">👆 Toque nos personagens para ouvir e brincar!</div>
+    <!-- Elenco de Personagens na Base -->
+    <div class="bottom-cast">
+      <div class="cast-hint">👆 Toque nos personagens para ouvir e brincar!</div>
 
-    <!-- Elenco de Personagens -->
-    <section class="characters-stage" id="castStage">
-      <div class="char-card" data-sound="whistle" data-line="Fiu-fiu! Tudo em ordem!">
-        <span class="speech-bubble"></span>
-        <img src="assets/banha.png" alt="Banha" />
-        <span class="char-tag">Banha</span>
-      </div>
+      <section class="characters-stage" id="castStage">
+        <div class="char-card" data-sound="whistle" data-line="Fiu-fiu! Tudo em ordem!">
+          <span class="speech-bubble"></span>
+          <img src="assets/banha.png" alt="Banha" />
+          <span class="char-tag">Banha</span>
+        </div>
 
-      <div class="char-card" data-sound="marimba" data-line="Oi! Vamos explorar?">
-        <span class="speech-bubble"></span>
-        <img src="assets/bento.png" alt="Bento" />
-        <span class="char-tag">Bento</span>
-      </div>
+        <div class="char-card" data-sound="marimba" data-line="Oi! Vamos explorar?">
+          <span class="speech-bubble"></span>
+          <img src="assets/bento.png" alt="Bento" />
+          <span class="char-tag">Bento</span>
+        </div>
 
-      <div class="char-card" data-sound="marimbaHigh" data-line="Que alegria te ver!">
-        <span class="speech-bubble"></span>
-        <img src="assets/duda.png" alt="Duda" />
-        <span class="char-tag">Duda</span>
-      </div>
+        <div class="char-card" data-sound="marimbaHigh" data-line="Que alegria te ver!">
+          <span class="speech-bubble"></span>
+          <img src="assets/duda.png" alt="Duda" />
+          <span class="char-tag">Duda</span>
+        </div>
 
-      <div class="char-card" data-sound="pop" data-line="Boing! Que legal!">
-        <span class="speech-bubble"></span>
-        <img src="assets/melequinha_claro.png" alt="Melequinha" />
-        <span class="char-tag">Melequinha</span>
-      </div>
+        <div class="char-card" data-sound="pop" data-line="Boing! Que legal!">
+          <span class="speech-bubble"></span>
+          <img src="assets/melequinha_claro.png" alt="Melequinha" />
+          <span class="char-tag">Melequinha</span>
+        </div>
 
-      <div class="char-card" data-sound="grumpy" data-line="Hmpf! Eu também gosto!">
-        <span class="speech-bubble"></span>
-        <img src="assets/melequinha_escuro.png" alt="Melequinha Bravo" />
-        <span class="char-tag">Zangadinho</span>
-      </div>
+        <div class="char-card" data-sound="grumpy" data-line="Hmpf! Eu também gosto!">
+          <span class="speech-bubble"></span>
+          <img src="assets/melequinha_escuro.png" alt="Melequinha Bravo" />
+          <span class="char-tag">Zangadinho</span>
+        </div>
 
-      <div class="char-card" data-sound="chirp" data-line="Piu-piu! Lá do alto!">
-        <span class="speech-bubble"></span>
-        <img src="assets/tuco.png" alt="Tuco" />
-        <span class="char-tag">Tuco</span>
-      </div>
+        <div class="char-card" data-sound="chirp" data-line="Piu-piu! Lá do alto!">
+          <span class="speech-bubble"></span>
+          <img src="assets/tuco.png" alt="Tuco" />
+          <span class="char-tag">Tuco</span>
+        </div>
 
-      <div class="char-card" data-sound="harp" data-line="Tem bolo quentinho!">
-        <span class="speech-bubble"></span>
-        <img src="assets/vovo_jaca.png" alt="Vovó Jaca" />
-        <span class="char-tag">Vovó Jaca</span>
-      </div>
-    </section>
+        <div class="char-card" data-sound="harp" data-line="Tem bolo quentinho!">
+          <span class="speech-bubble"></span>
+          <img src="assets/vovo_jaca.png" alt="Vovó Jaca" />
+          <span class="char-tag">Vovó Jaca</span>
+        </div>
+      </section>
+    </div>
   </main>
 
   <script>
@@ -776,7 +811,7 @@
         img.src = items[i % items.length];
         img.className = 'confetti-piece';
         img.style.left = Math.random() * 96 + 'vw';
-        img.style.width = (34 + Math.random() * 26) + 'px';
+        img.style.width = (30 + Math.random() * 22) + 'px';
         img.style.animationDuration = (2.4 + Math.random() * 2.2) + 's';
         img.style.animationDelay = (Math.random() * 0.8) + 's';
         document.body.appendChild(img);
@@ -804,7 +839,7 @@
       submitBtn.textContent = '✉️ Enviando cartinha...';
 
       try {
-        if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyJZic63zz14mQlhPHf6Ppu3Cc1WVf6px8hUZNdeZtSVM6yL9lvbSErQQhZFE3gf2nzVA/exec') {
+        if (SCRIPT_URL !== 'COLE_SUA_URL_DO_APPS_SCRIPT_AQUI') {
           await fetch(SCRIPT_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
