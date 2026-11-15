@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -23,7 +23,7 @@
   <meta name="twitter:card" content="summary_large_image" />
 
   <!-- =========================================================
-       OPCIONAL: MÉTRICAS (MICROSOFT CLARITY / GOOGLE ANALYTICS)
+       OPCIONAL: MÉTRICAS (MICROSOFT CLARITY)
        Descomente o bloco abaixo e cole seu ID quando quiser medir cliques
        ========================================================= -->
   <!--
@@ -331,7 +331,7 @@
       line-height: 1.2;
     }
 
-    /* Tela de Sucesso + Funil para Redes Sociais */
+    /* Tela de Sucesso + Funil Redes Sociais */
     .success-box {
       display: none;
       background: #eefbe8;
@@ -363,16 +363,23 @@
     .social-pill {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
       padding: 7px 14px;
       border-radius: 99px;
       font-family: 'Fredoka', sans-serif;
-      font-size: 0.85rem;
+      font-size: 0.86rem;
       color: #fff;
       text-decoration: none;
       border: 2px dashed rgba(255,255,255,0.75);
       box-shadow: 0 3px 0 rgba(0,0,0,0.2);
       transition: transform 0.15s ease;
+    }
+
+    .social-pill img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+      display: block;
     }
 
     .social-pill:hover { transform: translateY(-2px) scale(1.04); }
@@ -622,9 +629,15 @@
         <h2>🎉 Cartinha recebida com sucesso!</h2>
         <p>A bandeirinha da nossa caixa de correio já subiu! Enquanto abrimos as porteiras, acompanhe os bastidores do <strong>Pomar dos Fofinhos</strong>:</p>
         <div class="social-funnel" id="socialFunnel">
-          <a id="linkIg" class="social-pill ig" href="#" target="_blank" rel="noopener">📸 Instagram</a>
-          <a id="linkYt" class="social-pill yt" href="#" target="_blank" rel="noopener">▶️ YouTube</a>
-          <a id="linkTt" class="social-pill tt" href="#" target="_blank" rel="noopener">🎵 TikTok</a>
+          <a id="linkIg" class="social-pill ig" href="#" target="_blank" rel="noopener">
+            <img src="assets/icon_instagram.png" alt="Instagram" /> Instagram
+          </a>
+          <a id="linkYt" class="social-pill yt" href="#" target="_blank" rel="noopener">
+            <img src="assets/icon_youtube.png" alt="YouTube" /> YouTube
+          </a>
+          <a id="linkTt" class="social-pill tt" href="#" target="_blank" rel="noopener">
+            <img src="assets/icon_tiktok.png" alt="TikTok" /> TikTok
+          </a>
         </div>
       </div>
     </section>
@@ -688,8 +701,8 @@
     // Deixe '' (vazio) nas redes que ainda não tiver criado; o botão some automaticamente
     const SOCIAL_LINKS = {
       instagram: 'https://instagram.com/pomardosfofinhos',
-      youtube: 'https://www.youtube.com/@PomardosFofinhos',
-      tiktok: 'https://www.tiktok.com/@pomar.dos.fofinhos'
+      youtube: '',
+      tiktok: ''
     };
 
     // Configura botões das redes na tela de sucesso
@@ -730,7 +743,6 @@
     let audioCtx = null;
     let duckTimer = null;
 
-    // Abaixa suavemente a música durante efeitos sonoros e restaura depois
     function duckMusic(durationMs = 1400) {
       if (isMuted || bgMusic.paused) return;
       bgMusic.volume = DUCK_MUSIC_VOLUME;
